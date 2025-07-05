@@ -6,18 +6,26 @@ export default class ChatController {
     constructor() {
         this.model = new ChatModel();
         this.view = new ChatView();
+
         this.view.bindSendMessage(this.handleUserMessage.bind(this));
+        this.view.bindFileUpload();
     }
 
-    async handleUserMessage(text) {
-        this.model.addMessage('You', text);
+    async handleUserMessage(text, file) {
+        let fileURL = null;
+
+        if (file) {
+            fileURL = URL.createObjectURL(file);
+        }
+
+        this.model.addMessage('You', text, file, fileURL);
         this.view.renderMessages(this.model.getMessages());
         this.view.renderLoading();
 
-        const response = await this.fetchGeminiResponse(text);
+        const responseText = await this.fetchGeminiResponse(text);
 
         this.view.removeLoading();
-        this.model.addMessage('Gemini', response);
+        this.model.addMessage('Gemini', responseText);
         this.view.renderMessages(this.model.getMessages());
     }
 
@@ -29,9 +37,7 @@ export default class ChatController {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${API_KEY}`
                 },
-                body: JSON.stringify({
-                    message: text
-                })
+                body: JSON.stringify({ message: text })
             });
             const data = await res.json();
             return data.text || 'No response.';

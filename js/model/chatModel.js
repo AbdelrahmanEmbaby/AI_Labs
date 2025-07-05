@@ -3,12 +3,11 @@ export default class ChatModel {
         this.messages = [];
     }
 
-    addMessage(sender, content) {
-        this.messages.push({ sender, content });
+    addMessage(sender, content = null, file = null, fileURL = null) {
+        this.messages.push({ sender, content, file, fileURL });
     }
 
     getMessages() {
         return this.messages;
     }
 }
-  

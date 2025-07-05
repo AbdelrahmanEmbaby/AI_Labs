@@ -10,8 +10,17 @@
   <div id="chat-container"></div>
 
   <div class="input-container">
+    <!-- Hidden file input -->
+    <input type="file" id="file-input" hidden />
+    <!-- Label as button -->
+    <label for="file-input" class="file-label">📎</label>
+
+    <!-- Message input -->
     <input type="text" id="message-input" placeholder="Send a message" />
     <button id="send-button">Send</button>
+
+    <!-- File preview container -->
+    <div id="file-preview" class="file-preview"></div>
   </div>
 
   <script type="module" src="./main.js"></script>
